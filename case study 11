@@ -1,0 +1,106 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class OnlineShoppingSystem {
+
+    public static void processPayment(double price, int quantity, double discountPercentage, double paidAmount)
+            throws InvalidPriceException, InvalidQuantityException, InvalidDiscountException, InsufficientPaymentException {
+
+       
+        if (price <= 0) {
+            throw new InvalidPriceException("Error: Product price must be greater than 0.");
+        }
+
+        
+        if (quantity <= 0) {
+            throw new InvalidQuantityException("Error: Quantity must be at least 1.");
+        }
+
+        
+        if (discountPercentage < 0 || discountPercentage > 100) {
+            throw new InvalidDiscountException("Error: Discount percentage must be between 0 and 100.");
+        }
+
+        
+        double totalCost = price * quantity;
+        double discountAmount = (totalCost * discountPercentage) / 100;
+        double finalBill = totalCost - discountAmount;
+
+        
+        if (paidAmount < finalBill) {
+            throw new InsufficientPaymentException("Error: Paid amount (₹" + paidAmount + ") is less than final bill (₹" + finalBill + ").");
+        }
+
+        
+        double change = paidAmount - finalBill;
+        System.out.println("\n--- Payment Successful! ---");
+        System.out.println("Total Price: ₹" + totalCost);
+        System.out.println("Discount Applied: " + discountPercentage + "% (-₹" + discountAmount + ")");
+        System.out.println("Final Bill: ₹" + finalBill);
+        System.out.println("Amount Paid: ₹" + paidAmount);
+        System.out.println("Change Returned: ₹" + change);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.println("=== Online Shopping & Payment System ===");
+
+            
+            System.out.print("Enter product price: ");
+            double price = scanner.nextDouble();
+
+            System.out.print("Enter quantity: ");
+            int quantity = scanner.nextInt();
+
+            System.out.print("Enter discount percentage: ");
+            double discount = scanner.nextDouble();
+
+            
+            double tempTotal = price * quantity;
+            double tempBill = tempTotal - ((tempTotal * discount) / 100);
+            System.out.println("Your total bill amount is: ₹" + tempBill);
+
+            System.out.print("Enter payment amount: ");
+            double paidAmount = scanner.nextDouble();
+
+            
+            processPayment(price, quantity, discount, paidAmount);
+
+        } catch (InputMismatchException e) {
+            
+            System.out.println("\nError: Invalid input! Please enter valid numeric values.");
+        } catch (InvalidPriceException | InvalidQuantityException | // Custom Exceptions handling
+            System.out.println("\n" + e.getMessage());
+        } finally {
+            scanner.close();
+            System.out.println("\nThank you for shopping with us!");
+        }
+    }
+}
+
+
+class InvalidPriceException extends Exception {
+    public InvalidPriceException(String message) {
+        super(message);
+    }
+}
+
+class InvalidQuantityException extends Exception {
+    public InvalidQuantityException(String message) {
+        super(message);
+    }
+}
+
+class InvalidDiscountException extends Exception {
+    public InvalidDiscountException(String message) {
+        super(message);
+    }
+}
+
+class InsufficientPaymentException extends Exception {
+    public InsufficientPaymentException(String message) {
+        super(message);
+    }
+}
