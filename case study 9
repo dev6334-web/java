@@ -1,0 +1,64 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class BankAccount {
+    private static double balance = 5000.00; // Total account balance
+
+    public static void withdraw(double amount) throws InvalidAmountException, InsufficientBalanceException {
+       
+        if (amount <= 0) {
+            throw new InvalidAmountException("Error: Amount must be greater than 0.");
+        }
+
+        
+        if (amount > balance) {
+            throw new InsufficientBalanceException("Error: Insufficient balance. Available balance: ₹" + balance);
+        }
+
+
+        balance -= amount        ;
+        System.out.println("\n--- Withdrawal Successful! ---");
+        System.out.println("Withdrawn Amount: ₹" + amount);
+        System.out.println("Remaining Balance: ₹" + balance);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.println("=== Bank Account Withdrawal System ===");
+            System.out.println("Current Account Balance: ₹" + balance);
+
+            
+            System.out.print("Enter amount to withdraw: ");
+            double amount = scanner.nextDouble();
+
+           
+            withdraw(amount);
+
+        } catch (InputMismatchException e) {
+           
+            System.out.println("\nError: Invalid input! Please enter a valid numeric amount.");
+        } catch (InvalidAmountException | InsufficientBalanceException e) {
+            
+            System.out.println("\n" + e.getMessage());
+        } finally {
+            scanner.close();
+            System.out.println("\nThank you for banking with us!");
+        }
+    }
+}
+
+
+class InvalidAmountException extends Exception {
+    public InvalidAmountException(String message) {
+        super(message);
+    }
+}
+
+
+class InsufficientBalanceException extends Exception {
+    public InsufficientBalanceException(String message) {
+        super(message);
+    }
+}
