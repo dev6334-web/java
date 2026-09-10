@@ -1,0 +1,73 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+
+public class BusBookingSystem {
+    private static int availableSeats = 10;
+
+    public static void bookTicket(int age, int requestedSeats) 
+            throws InvalidAgeException, InvalidSeatException, InsufficientSeatsException {
+        
+        if (age <= 0) {
+            throw new InvalidAgeException("Error: Age must be greater than 0.");
+        }
+
+        if (requestedSeats <= 0) {
+            throw new InvalidSeatException("Error: Number of seats must be greater than 0.");
+        }
+
+        if (requestedSeats > availableSeats) {
+            throw new InsufficientSeatsException("Error: Only " + availableSeats + " seats available.");
+        }
+
+        availableSeats -= requestedSeats;
+        System.out.println("\n--- Booking Successful! ---");
+        System.out.println("Age: " + age);
+        System.out.println("Seats Booked: " + requestedSeats);
+        System.out.println("Remaining Seats: " + availableSeats);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.println("=== Bus Ticket Booking System ===");
+            System.out.println("Available Seats: " + availableSeats);
+
+            System.out.print("Enter passenger age: ");
+            int age = scanner.nextInt();
+
+            System.out.print("Enter number of seats: ");
+            int seats = scanner.nextInt();
+
+            bookTicket(age, seats);
+
+        } catch (InputMismatchException e) {
+            System.out.println("\nError: Invalid input! Please enter numeric values only.");
+        } catch (InvalidAgeException | InvalidSeatException | InsufficientSeatsException e) {
+            System.out.println("\n" + e.getMessage());
+        } finally {
+            scanner.close();
+            System.out.println("\nThank you for using the system!");
+        }
+    }
+}
+
+
+class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+
+class InvalidSeatException extends Exception {
+    public InvalidSeatException(String message) {
+        super(message);
+    }
+}
+
+class InsufficientSeatsException extends Exception {
+    public InsufficientSeatsException(String message) {
+        super(message);
+    }
+}
