@@ -1,0 +1,65 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class StudentResultSystem {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.println("=== Student Examination Result System ===");
+
+           
+            System.out.print("Enter total number of subjects: ");
+            int numSubjects = scanner.nextInt();
+
+            
+            if (numSubjects == 0) {
+                throw new ArithmeticException("Error: Cannot calculate average for 0 subjects (Division by zero).");
+            }
+
+            if (numSubjects < 0) {
+                throw new InvalidMarksException("Error: Number of subjects cannot be negative.");
+            }
+
+            double totalMarks = 0;
+
+          
+            for (int i = 1; i <= numSubjects; i++) {
+                System.out.print("Enter marks for Subject " + i + " (0 - 100): ");
+                double marks = scanner.nextDouble();
+
+               
+                if (marks < 0 || marks > 100) {
+                    throw new InvalidMarksException("Error: Invalid marks (" + marks + "). Marks must be between 0 and 100.");
+                }
+
+                totalMarks += marks;
+            }
+
+          
+            double average = totalMarks / numSubjects;
+
+            System.out.println("\n--- Result Summary ---");
+            System.out.println("Total Subjects: " + numSubjects);
+            System.out.println("Total Marks: " + totalMarks);
+            System.out.println("Average Marks: " + average);
+
+        } catch (InputMismatchException e) {
+          
+            System.out.println("\nError: Invalid input! Please enter numeric values only.");
+        } catch (ArithmeticException | InvalidMarksException e) {
+
+            System.out.println("\n" + e.getMessage());
+        } finally {
+            scanner.close();
+            System.out.println("\nProcess Completed!");
+        }
+    }
+}
+
+class InvalidMarksException extends Exception {
+    public InvalidMarksException(String message) {
+        super(message);
+    }
+}
